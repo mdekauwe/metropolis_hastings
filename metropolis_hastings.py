@@ -104,14 +104,14 @@ if __name__ == "__main__":
     
     if test_tune == True:
         # We need to tune the proposal matrix, so walk around parameter space
-        # this is unchanged from what Jose sent me
+        # this is basically unchanged from what Jose sent me
         print 'Aim for 20-30 %'
         MC_test = MetropolisHastings(num_samples, burn_in, X, obs)
-        for tune in np.logspace(-3,1.0,20):
-            
+        for tune in np.linspace(0.001, 10.0, 10.0):
             chain = MC_test.sample(params_guess, tune)
-            accepted = 100.0 * len(np.unique(chain[:,0])) / chain.shape[0]
-            print "Step size: %6.4g ----> acceptance rate: %6.2f percent" % \
+            accepted = len(np.unique(chain[:,0]))
+            accepted = (accepted/(num_samples-burn_in)*100.)
+            print "Step size: %6.4g ----> acceptance rate: %6.2f %%" % \
                     (tune, accepted)
     
     MC = MetropolisHastings(num_samples, burn_in, X, obs)
